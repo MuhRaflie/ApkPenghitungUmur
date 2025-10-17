@@ -20,6 +20,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     
     public PenghitungUmurFrame() {
         initComponents();
+        helper = new PenghitungUmurHelper(); 
     }
 
     /**
@@ -55,6 +56,11 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
 
         dateChooserTanggalLahir.setToolTipText("");
         dateChooserTanggalLahir.setDateFormatString("dd-MM-yyyy ");
+        dateChooserTanggalLahir.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateChooserTanggalLahirPropertyChange(evt);
+            }
+        });
 
         txtUmur.setFont(new java.awt.Font("No Continue", 0, 14)); // NOI18N
         txtUmur.addActionListener(new java.awt.event.ActionListener() {
@@ -182,6 +188,11 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     private void btnKeluar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluar
         System.exit(0);
     }//GEN-LAST:event_btnKeluar
+
+    private void dateChooserTanggalLahirPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooserTanggalLahirPropertyChange
+        txtUmur.setText(""); 
+        txtHariUlangTahunBerikutnya.setText(""); 
+    }//GEN-LAST:event_dateChooserTanggalLahirPropertyChange
 
     /**
      * @param args the command line arguments
