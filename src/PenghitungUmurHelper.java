@@ -12,6 +12,8 @@ import java.util.function.Supplier;
 import javax.swing.JTextArea;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.net.URLEncoder;
+
 /**
  *
  * @author HP
@@ -30,8 +32,7 @@ public class PenghitungUmurHelper {
         return ulangTahun;
     }
 // Mendapatkan peristiwa penting secara baris per baris 
-public void getPeristiwaBarisPerBaris(LocalDate tanggal, JTextArea 
-txtAreaPeristiwa, Supplier<Boolean> shouldStop) { 
+public void getPeristiwaBarisPerBaris(LocalDate tanggal, JTextArea txtAreaPeristiwa, Supplier<Boolean> shouldStop) { 
     try { 
         // Periksa jika thread seharusnya dihentikan sebelum dimulai 
         if (shouldStop.get()) { 
@@ -61,8 +62,7 @@ InputStreamReader(conn.getInputStream()));
             if (shouldStop.get()) { 
                 in.close(); 
                 conn.disconnect(); 
-                javax.swing.SwingUtilities.invokeLater(() -> 
-txtAreaPeristiwa.setText("Pengambilan data dibatalkan.\n")); 
+                javax.swing.SwingUtilities.invokeLater(() -> txtAreaPeristiwa.setText("Pengambilan data dibatalkan.\n")); 
                 return; 
             } 
             content.append(inputLine); 
@@ -75,30 +75,124 @@ txtAreaPeristiwa.setText("Pengambilan data dibatalkan.\n"));
         for (int i = 0; i < events.length(); i++) { 
             // Periksa jika thread seharusnya dihentikan sebelum memproses data 
             if (shouldStop.get()) { 
-                javax.swing.SwingUtilities.invokeLater(() -> 
-txtAreaPeristiwa.setText("Pengambilan data dibatalkan.\n")); 
+                javax.swing.SwingUtilities.invokeLater(() -> txtAreaPeristiwa.setText("Pengambilan data dibatalkan.\n")); 
                 return; 
             } 
  
             JSONObject event = events.getJSONObject(i); 
-            String year = event.getString("year"); 
-            String description = event.getString("description"); 
-            String peristiwa = year + ": " + description; 
+            String year = event.getString("year");
+            String description = event.getString("description");
+            String translatedDescription = translateToIndonesian(description);
+            String peristiwa = year + ": " + translatedDescription;
  
-            javax.swing.SwingUtilities.invokeLater(() -> 
-txtAreaPeristiwa.append(peristiwa + "\n")); 
+ 
+            javax.swing.SwingUtilities.invokeLater(() -> txtAreaPeristiwa.append(peristiwa + "\n")); 
         } 
  
         if (events.length() == 0) { 
-            javax.swing.SwingUtilities.invokeLater(() -> 
-            txtAreaPeristiwa.setText("Tidak ada peristiwa penting yang ditemukan pada tanggal ini.")); 
+            javax.swing.SwingUtilities.invokeLater(() -> txtAreaPeristiwa.setText("Tidak ada peristiwa penting yang ditemukan pada tanggal ini.")); 
         } 
     } catch (Exception e) { 
-        javax.swing.SwingUtilities.invokeLater(() -> 
-txtAreaPeristiwa.setText("Gagal mendapatkan data peristiwa: " + 
+        javax.swing.SwingUtilities.invokeLater(() -> txtAreaPeristiwa.setText("Gagal mendapatkan data peristiwa: " + 
 e.getMessage())); 
     } 
 } 
+
+// Menerjemahkan teks ke bahasa Indonesia 
+// Menerjemahkan teks ke bahasa Indonesia 
+private String translateToIndonesian(String text) { 
+    try { 
+        String urlString = "https://lingva.ml/api/v1/en/id/" + 
+text.replace(" ", "%20"); 
+        URL url = new URL(urlString); 
+        HttpURLConnection conn = (HttpURLConnection) 
+url.openConnection(); 
+        conn.setRequestMethod("GET"); 
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0"); 
+ 
+        int responseCode = conn.getResponseCode(); 
+        if (responseCode != 200) { 
+            throw new Exception("HTTP response code: " + responseCode); 
+        } 
+ 
+        BufferedReader in = new BufferedReader(new 
+InputStreamReader(conn.getInputStream(), "utf-8")); 
+        String inputLine; 
+        StringBuilder content = new StringBuilder(); 
+        while ((inputLine = in.readLine()) != null) { 
+            content.append(inputLine); 
+        } 
+        in.close(); 
+        conn.disconnect(); 
+ 
+        JSONObject json = new JSONObject(content.toString()); 
+        return json.getString("translation"); 
+    } catch (Exception e) { 
+        return text + " (Gagal diterjemahkan)"; 
+    } 
+}  
+
+
+public String translateText(String text, String targetLang) {
+    try {
+        String encodedText = URLEncoder.encode(text, "UTF-8");
+        String urlString = "https://api.mymemory.translated.net/get?q=" + encodedText + "&langpair=auto|" + targetLang;
+
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = in.readLine()) != null) {
+            response.append(line);
+        }
+        in.close();
+        conn.disconnect();
+
+        JSONObject json = new JSONObject(response.toString());
+        return json.getJSONObject("responseData").getString("translatedText");
+    } catch (Exception e) {
+        return "Gagal menerjemahkan: " + e.getMessage();
+    }
+}
+
+
+// Fungsi terjemahan offline sederhana (fallback)
+public String translateOffline(String text) {
+    text = text.toLowerCase();
+
+    // Ganti kata-kata umum dari bahasa Inggris ke Indonesia
+    text = text.replace("years", "tahun");
+    text = text.replace("year", "tahun");
+    text = text.replace("months", "bulan");
+    text = text.replace("month", "bulan");
+    text = text.replace("days", "hari");
+    text = text.replace("day", "hari");
+    text = text.replace("birthday", "ulang tahun");
+    text = text.replace("next", "berikutnya");
+    text = text.replace("saturday", "sabtu");
+    text = text.replace("sunday", "minggu");
+    text = text.replace("monday", "senin");
+    text = text.replace("tuesday", "selasa");
+    text = text.replace("wednesday", "rabu");
+    text = text.replace("thursday", "kamis");
+    text = text.replace("friday", "jumat");
+
+    return text + " (terjemahan offline)";
+}
+
+// Fungsi kombinasi: coba online dulu, kalau gagal pakai offline
+public String translateSmart(String text, String targetLang) {
+    String hasil = translateText(text, targetLang);
+    if (hasil.startsWith("Gagal")) {
+        hasil = translateOffline(text);
+    }
+    return hasil;
+}
+
 
     public String getDayOfWeekInIndonesian(LocalDate date) {
         switch (date.getDayOfWeek()) {
