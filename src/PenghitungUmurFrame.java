@@ -7,6 +7,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.swing.SwingUtilities;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.Image;
+
 
 /**
  *
@@ -22,6 +26,26 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     public PenghitungUmurFrame() {
         initComponents();
         setLocationRelativeTo(null);
+        try {
+    ImageIcon icon = new ImageIcon(getClass().getResource("/Background.jpg"));
+    Image img = icon.getImage().getScaledInstance(
+        jPanel1.getWidth(),
+        jPanel1.getHeight(),
+        Image.SCALE_SMOOTH
+    );
+
+    JLabel bg = new JLabel(new ImageIcon(img));
+    bg.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+
+    // Tambahkan ke panel1
+    jPanel1.add(bg);
+    // Pastikan background berada di lapisan paling belakang
+    jPanel1.setComponentZOrder(bg, jPanel1.getComponentCount() - 1);
+
+} catch (Exception e) {
+    System.out.println("Gagal memuat background: " + e.getMessage());
+}
+
         helper = new PenghitungUmurHelper(); 
     }
 
@@ -43,6 +67,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         txtHariUlangTahunBerikutnya = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnTranslate = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -51,12 +76,15 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("umur anda");
 
         jLabel3.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText(" pilih tanggal lahir ");
 
         jLabel4.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("hari ulang tahun berikutnya");
 
         dateChooserTanggalLahir.setToolTipText("");
@@ -92,6 +120,14 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
             }
         });
 
+        btnTranslate.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        btnTranslate.setText("Translate");
+        btnTranslate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTranslate(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -101,7 +137,9 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTranslate)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -136,7 +174,8 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(btnTranslate))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -260,6 +299,23 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     txtHariUlangTahunBerikutnya.setText("");
     }//GEN-LAST:event_dateChooserTanggalLahirPropertyChange
 
+    private void btnTranslate(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranslate
+    try {
+        String textToTranslate = txtUmur.getText() + "\n" + txtHariUlangTahunBerikutnya.getText();
+        if (textToTranslate.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Hitung umur dulu sebelum menerjemahkan.");
+            return;
+        }
+
+        // Gunakan smart translate
+        String hasil = helper.translateSmart(textToTranslate, "en");
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Hasil Terjemahan:\n" + hasil);
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnTranslate
+
     /**
      * @param args the command line arguments
      */
@@ -296,6 +352,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnTranslate;
     private com.toedter.calendar.JDateChooser dateChooserTanggalLahir;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
