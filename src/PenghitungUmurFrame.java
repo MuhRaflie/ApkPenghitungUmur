@@ -2,6 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  *
@@ -12,6 +16,8 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     /**
      * Creates new form PenghitungUmurFrame
      */
+    private PenghitungUmurHelper helper;
+    
     public PenghitungUmurFrame() {
         initComponents();
     }
@@ -29,7 +35,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dateChooserTanggalLahir = new com.toedter.calendar.JDateChooser();
         txtUmur = new javax.swing.JTextField();
         txtHariUlangTahunBerikutnya = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -47,6 +53,9 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
         jLabel4.setText("hari ulang tahun berikutnya");
 
+        dateChooserTanggalLahir.setToolTipText("");
+        dateChooserTanggalLahir.setDateFormatString("dd-MM-yyyy ");
+
         txtUmur.setFont(new java.awt.Font("No Continue", 0, 14)); // NOI18N
         txtUmur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,9 +67,19 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
         jButton1.setText("hitung umur");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHitung(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
         jButton2.setText("keluar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKeluar(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -77,7 +96,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel3)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(dateChooserTanggalLahir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -94,7 +113,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateChooserTanggalLahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -144,6 +163,26 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUmurActionPerformed
 
+    private void btnHitung(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitung
+        Date tanggalLahir = dateChooserTanggalLahir.getDate();
+    if (tanggalLahir != null) {
+        LocalDate lahir = tanggalLahir.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate sekarang = LocalDate.now();
+
+        String umur = helper.hitungUmurDetail(lahir, sekarang);
+        txtUmur.setText(umur);
+
+        LocalDate ulangTahunBerikutnya = helper.hariUlangTahunBerikutnya(lahir, sekarang);
+        String hari = helper.getDayOfWeekInIndonesian(ulangTahunBerikutnya);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        txtHariUlangTahunBerikutnya.setText(hari + " (" + ulangTahunBerikutnya.format(formatter) + ")");
+    }
+    }//GEN-LAST:event_btnHitung
+
+    private void btnKeluar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluar
+        System.exit(0);
+    }//GEN-LAST:event_btnKeluar
+
     /**
      * @param args the command line arguments
      */
@@ -180,9 +219,9 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser dateChooserTanggalLahir;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
