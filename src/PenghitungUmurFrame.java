@@ -184,7 +184,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         jLabel1.setText(" aplikasi penghitung umur ");
 
         txtAreaPeristiwa.setColumns(20);
-        txtAreaPeristiwa.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        txtAreaPeristiwa.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         txtAreaPeristiwa.setRows(20);
         jScrollPane1.setViewportView(txtAreaPeristiwa);
 
