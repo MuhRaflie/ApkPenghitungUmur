@@ -75,36 +75,37 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("umur anda");
 
-        jLabel3.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText(" pilih tanggal lahir ");
 
-        jLabel4.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("hari ulang tahun berikutnya");
 
         dateChooserTanggalLahir.setToolTipText("");
         dateChooserTanggalLahir.setDateFormatString("dd-MM-yyyy ");
+        dateChooserTanggalLahir.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         dateChooserTanggalLahir.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 dateChooserTanggalLahirPropertyChange(evt);
             }
         });
 
-        txtUmur.setFont(new java.awt.Font("No Continue", 0, 14)); // NOI18N
+        txtUmur.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         txtUmur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUmurActionPerformed(evt);
             }
         });
 
-        txtHariUlangTahunBerikutnya.setFont(new java.awt.Font("No Continue", 0, 14)); // NOI18N
+        txtHariUlangTahunBerikutnya.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         jButton1.setText("hitung umur");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,7 +113,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         jButton2.setText("keluar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,7 +121,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
             }
         });
 
-        btnTranslate.setFont(new java.awt.Font("Evogria", 0, 14)); // NOI18N
+        btnTranslate.setFont(new java.awt.Font("Milky Nice", 0, 14)); // NOI18N
         btnTranslate.setText("Translate");
         btnTranslate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,7 +228,7 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
